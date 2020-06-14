@@ -28,7 +28,7 @@ private val LightColorPalette = lightColorPalette(
 )
 
 @Composable
-fun HyrdroHomieTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun HydroHomieTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
