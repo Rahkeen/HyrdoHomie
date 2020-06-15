@@ -16,6 +16,7 @@ import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
@@ -48,7 +49,6 @@ data class WaterState(
 
 @Composable
 fun WaterContainer() {
-
     var waterState by state { WaterState() }
     val addWaterAction: () -> Unit = {
         val count = minOf(waterState.count + 1, waterState.goal)
@@ -65,14 +65,25 @@ fun WaterContainer() {
             horizontalGravity = Alignment.CenterHorizontally
         ) {
             WaterBackground(waterState)
-            Button(
-                onClick = addWaterAction,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clip(MaterialTheme.shapes.large),
-                backgroundColor = hydroBlue
-            ) {
-                Text(text = "Add", color = MaterialTheme.colors.onSurface)
+            Row {
+                Button(
+                    onClick = addWaterAction,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clip(MaterialTheme.shapes.large),
+                    backgroundColor = hydroBlue
+                ) {
+                    Text(text = "Add", color = MaterialTheme.colors.onSurface)
+                }
+                Button(
+                    onClick = { waterState = waterState.copy(count = 0) },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clip(MaterialTheme.shapes.large),
+                    backgroundColor = Color.Red
+                ) {
+                    Text(text = "Reset", color = MaterialTheme.colors.onSurface)
+                }
             }
         }
     }
