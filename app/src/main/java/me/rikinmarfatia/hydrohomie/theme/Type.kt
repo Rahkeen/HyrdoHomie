@@ -1,4 +1,4 @@
-package me.rikinmarfatia.hydrohomie.ui
+package me.rikinmarfatia.hydrohomie.theme
 
 import androidx.ui.material.Typography
 import androidx.ui.text.TextStyle

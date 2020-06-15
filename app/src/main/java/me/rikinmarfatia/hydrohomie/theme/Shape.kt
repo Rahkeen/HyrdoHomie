@@ -1,4 +1,4 @@
-package me.rikinmarfatia.hydrohomie.ui
+package me.rikinmarfatia.hydrohomie.theme
 
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.material.Shapes
@@ -7,5 +7,5 @@ import androidx.ui.unit.dp
 val shapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(4.dp),
-    large = RoundedCornerShape(0.dp)
+    large = RoundedCornerShape(32.dp)
 )

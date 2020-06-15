@@ -1,4 +1,4 @@
-package me.rikinmarfatia.hydrohomie.ui
+package me.rikinmarfatia.hydrohomie.theme
 
 import androidx.compose.Composable
 import androidx.ui.foundation.isSystemInDarkTheme
