@@ -23,6 +23,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
+import androidx.ui.layout.padding
 import androidx.ui.layout.size
 import androidx.ui.layout.width
 import androidx.ui.material.MaterialTheme
@@ -49,8 +50,12 @@ fun waterTransitionDefinition(waterState: WaterState) = transitionDefinition {
     }
 }
 
+/**
+ * A view that represents a water glass that fills as you drink more water
+ * and get closer to your goal.
+ */
 @Composable
-fun WaterBox(state: WaterState) {
+fun WaterGlass(state: WaterState) {
     val width = 300.dp
     val height = 400.dp
     val transitionDef = waterTransitionDefinition(state)
@@ -83,6 +88,9 @@ fun WaterBox(state: WaterState) {
     }
 }
 
+/**
+ * A simple textual display showing the current count over the goal
+ */
 @Composable
 fun DailyGoalDisplay(waterState: WaterState) {
 
@@ -103,6 +111,9 @@ fun DailyGoalDisplay(waterState: WaterState) {
     )
 }
 
+/**
+ * A profile picture view. Right now it just displays a dummy image.
+ */
 @Composable
 fun ProfilePic() {
     val image = imageResource(id = R.drawable.dummy_image)
@@ -127,7 +138,7 @@ fun ProfilePic() {
 @Preview
 @Composable
 fun WaterBoxPreview() {
-    WaterBox(state = WaterState())
+    WaterGlass(state = WaterState())
 }
 
 @Preview(showBackground = true)

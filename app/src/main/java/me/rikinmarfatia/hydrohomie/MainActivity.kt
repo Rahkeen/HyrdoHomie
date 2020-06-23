@@ -31,7 +31,7 @@ import me.rikinmarfatia.hydrohomie.theme.HydroHomieTheme
 import me.rikinmarfatia.hydrohomie.theme.hydroBlue
 import me.rikinmarfatia.hydrohomie.ui.DailyGoalDisplay
 import me.rikinmarfatia.hydrohomie.ui.ProfilePic
-import me.rikinmarfatia.hydrohomie.ui.WaterBox
+import me.rikinmarfatia.hydrohomie.ui.WaterGlass
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ fun DailyTrackerContainer() {
         ) {
             ProfilePic()
             Spacer(modifier = Modifier.height(16.dp))
-            WaterBox(waterState)
+            WaterGlass(waterState)
             // Container that lays out children horizontally
             Row {
                 Button(
