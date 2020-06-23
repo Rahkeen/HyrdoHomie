@@ -16,6 +16,7 @@ import androidx.ui.layout.padding
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.style.TextAlign
+import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import me.rikinmarfatia.hydrohomie.theme.typography
 
@@ -56,4 +57,10 @@ fun Counter() {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun CounterPreview() {
+    Counter()
 }
