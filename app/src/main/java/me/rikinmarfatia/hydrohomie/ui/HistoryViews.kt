@@ -1,18 +1,25 @@
 package me.rikinmarfatia.hydrohomie.ui
 
 import androidx.compose.Composable
+import androidx.compose.emptyContent
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
 import androidx.ui.foundation.AdapterList
 import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.graphics.Color
 import androidx.ui.layout.ConstraintLayout
 import androidx.ui.layout.ConstraintSet
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxHeight
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.layout.padding
+import androidx.ui.layout.width
+import androidx.ui.layout.wrapContentSize
+import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.Card
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
@@ -24,7 +31,6 @@ import me.rikinmarfatia.hydrohomie.theme.hydroBlue
 data class HistoryState(
     val days: List<WaterState>
 )
-
 
 @Composable
 fun HistoryContainer(state: HistoryState) {
@@ -54,6 +60,14 @@ fun HistoryRow(state: WaterState) {
         val date = tag("date")
         val progress = tag("progress")
         val icon = tag("icon")
+        val box = tag("box")
+        val boxGuide = createGuidelineFromLeft(state.percentCompletion)
+
+        box.apply {
+            left to parent.left
+            right to boxGuide
+            width = spread
+        }
 
         icon.apply {
             centerVertically()
@@ -87,6 +101,13 @@ fun HistoryRow(state: WaterState) {
         elevation = 4.dp
     ) {
         ConstraintLayout(constraints) {
+            Card(
+                modifier = Modifier.tag("box").fillMaxSize(),
+                shape = RoundedCornerShape(8.dp),
+                color = Color.LightGray,
+                elevation = 0.dp,
+                content = emptyContent()
+            )
             Icon(
                 asset = waterIcon,
                 tint = hydroBlue,
