@@ -3,25 +3,17 @@ package me.rikinmarfatia.hydrohomie.ui
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
+import androidx.ui.foundation.AdapterList
 import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.vector.drawVector
-import androidx.ui.layout.Column
 import androidx.ui.layout.ConstraintLayout
 import androidx.ui.layout.ConstraintSet
 import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxHeight
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.preferredWidth
 import androidx.ui.material.Card
-import androidx.ui.material.ListItem
-import androidx.ui.material.MaterialTheme
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -33,17 +25,26 @@ data class HistoryState(
     val days: List<WaterState>
 )
 
+
 @Composable
-fun HistoryContainer(state: WaterState) {
-    Column(
-        modifier = Modifier
-        .padding(8.dp)
-        .fillMaxHeight()
+fun HistoryContainer(state: HistoryState) {
+    AdapterList(
+        data = state.days
     ) {
-        HistoryRow(state)
         Spacer(modifier = Modifier.height(8.dp))
-        HistoryRow(state)
+        HistoryRow(state = it)
     }
+}
+
+@ExperimentalStdlibApi
+fun dummyHistoryState(num: Int): HistoryState {
+    return HistoryState(
+        days = buildList {
+            for (i in 0 until num) {
+                add(WaterState(count = i % 9))
+            }
+        }
+    )
 }
 
 @Composable
@@ -75,6 +76,7 @@ fun HistoryRow(state: WaterState) {
 
     val cardModifier = Modifier
         .fillMaxWidth()
+        .padding(horizontal = 8.dp)
         .height(60.dp)
 
     val waterIcon = vectorResource(id = R.drawable.ic_favorite)
@@ -96,8 +98,11 @@ fun HistoryRow(state: WaterState) {
     }
 }
 
+@ExperimentalStdlibApi
 @Preview(showBackground = true)
 @Composable
 fun HistoryRowPreview() {
-    HistoryContainer(state = WaterState())
+    HistoryContainer(
+        state = dummyHistoryState(20)
+    )
 }
