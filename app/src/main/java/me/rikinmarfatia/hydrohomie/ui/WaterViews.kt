@@ -4,14 +4,12 @@ import androidx.animation.FastOutSlowInEasing
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
+import androidx.compose.emptyContent
 import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
-import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
 import androidx.ui.core.clip
-import androidx.ui.core.drawShadow
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.drawBorder
 import androidx.ui.foundation.shape.corner.CircleShape
@@ -23,15 +21,16 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
-import androidx.ui.layout.padding
 import androidx.ui.layout.size
 import androidx.ui.layout.width
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import androidx.ui.res.imageResource
 import androidx.ui.text.style.TextAlign
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import dev.chrisbanes.accompanist.coil.CoilImage
 import me.rikinmarfatia.hydrohomie.R
 import me.rikinmarfatia.hydrohomie.models.WaterState
 import me.rikinmarfatia.hydrohomie.theme.hydroBlue
@@ -116,21 +115,25 @@ fun DailyGoalDisplay(waterState: WaterState) {
  */
 @Composable
 fun ProfilePic() {
-    val image = imageResource(id = R.drawable.dummy_image)
     val imageModifier = Modifier
         .size(60.dp)
-        .drawShadow(8.dp, CircleShape)
-        .drawBorder(4.dp, hydroBlue, CircleShape)
-
+        .clip(CircleShape)
+        .drawBorder(size = 2.dp, color = MaterialTheme.colors.onSurface, shape = CircleShape)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Image(
-            asset = image,
+        CoilImage(
+            data = "https://i.pinimg.com/originals/13/8c/8d/138c8d92efa0228c42c5e43517d99479.jpg",
             modifier = imageModifier,
-            contentScale = ContentScale.Crop
+            loading = {
+                Surface(
+                    color = Color.LightGray,
+                    content = emptyContent(),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         )
     }
 }
