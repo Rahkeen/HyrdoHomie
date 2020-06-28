@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_container"
+    android:layout_width="110dp"
+    android:layout_height="110dp"
+    android:background="@drawable/widget_background">
+
+    <TextView
+        android:id="@+id/widget_goal_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="@string/widget_count_display"
+        tools:text = "3 / 8" />
+
+    <Button
+        android:id="@+id/widget_add_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/widget_plus_button"
+        android:textColor="@color/white"
+        android:text="+" />
+
+</FrameLayout>
