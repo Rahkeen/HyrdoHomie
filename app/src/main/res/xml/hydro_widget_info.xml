@@ -3,8 +3,9 @@
     android:initialLayout="@layout/hydro_widget"
     android:initialKeyguardLayout="@layout/hydro_widget"
     android:minWidth="110dp"
-    android:minHeight="110dp"
-    android:resizeMode="horizontal|vertical"
+    android:minHeight="@dimen/widget_cell_1"
+    android:minResizeHeight="@dimen/widget_cell_2"
+    android:resizeMode="vertical"
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="0"
     android:previewImage="@drawable/widget_background" />
