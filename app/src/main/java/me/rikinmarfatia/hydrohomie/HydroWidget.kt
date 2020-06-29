@@ -28,34 +28,14 @@ class HydroWidget: AppWidgetProvider() {
         }
     }
 
+    // We also override onReceive to update since just onUpdate() isn't very reliable
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         Log.d(TAG, "Received: ${intent.action}")
 
-        val waterStore = WaterKrate(context)
         if (ACTION_UPDATE_COUNT == intent.action ) {
 
-            val display = String.format(
-                context.resources.getString(R.string.widget_count_display),
-                waterStore.count,
-                waterStore.goal
-            )
-
-            Log.d(TAG, display)
-
-            val views: RemoteViews = RemoteViews(
-                context.packageName,
-                R.layout.hydro_widget
-            ).apply {
-                setTextViewText(R.id.widget_goal_display, display)
-                setImageViewResource(
-                    R.id.widget_water_fill_level,
-                    waterFillDrawable(
-                        waterStore.count,
-                        waterStore.goal
-                    )
-                )
-            }
+            val views: RemoteViews = renderWidgetViews(context)
 
             val appWidget = ComponentName(context, HydroWidget::class.java)
             val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -64,41 +44,49 @@ class HydroWidget: AppWidgetProvider() {
     }
 
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-        val waterStore = WaterKrate(context)
-        Log.d(TAG, "WaterStore Count: ${waterStore.count}")
-
         val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java).let { intent ->
             PendingIntent.getActivity(context, 0, intent, 0)
         }
 
-        val display = String.format(
-            context.resources.getString(R.string.widget_count_display),
-            waterStore.count,
-            waterStore.goal
-        )
-
-        val views: RemoteViews = RemoteViews(
-            context.packageName,
-            R.layout.hydro_widget
-        ).apply {
-            setOnClickPendingIntent(R.id.widget_container, pendingIntent)
-            setTextViewText(R.id.widget_goal_display, display)
-            setImageViewResource(
-                R.id.widget_water_fill_level,
-                waterFillDrawable(
-                    waterStore.count,
-                    waterStore.goal
-                )
-            )
+        val views = renderWidgetViews(context).also {
+            setWidgetClickAction(it, pendingIntent)
         }
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    private fun waterFillDrawable(
-        count: Int,
-        goal: Int
-    ): Int {
+    private fun renderWidgetViews(
+        context: Context,
+        waterStore: WaterKrate = WaterKrate(context)
+    ): RemoteViews {
+        val count = waterStore.count
+        val goal = waterStore.goal
+
+        val display = waterDisplay(count, goal, context)
+        val fillDrawable = waterFillDrawable(count, goal)
+
+        return RemoteViews(
+            context.packageName,
+            R.layout.hydro_widget
+        ).apply {
+            setTextViewText(R.id.widget_goal_display, display)
+            setImageViewResource(R.id.widget_water_fill_level, fillDrawable)
+        }
+    }
+
+    private fun setWidgetClickAction(widgetViews: RemoteViews, pendingIntent: PendingIntent) {
+        widgetViews.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+    }
+
+    private fun waterDisplay(count: Int, goal: Int, context: Context): String {
+       return String.format(
+           context.resources.getString(R.string.widget_count_display),
+           count,
+           goal
+       )
+    }
+
+    private fun waterFillDrawable(count: Int, goal: Int): Int {
         val percentCompletion = count.toFloat() / goal
         return when {
             percentCompletion == 0F -> {
