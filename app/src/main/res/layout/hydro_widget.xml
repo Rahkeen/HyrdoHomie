@@ -6,6 +6,13 @@
     android:layout_height="110dp"
     android:background="@drawable/widget_background">
 
+    <ImageView
+        android:id="@+id/widget_water_fill_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:contentDescription="@null" />
+
     <TextView
         android:id="@+id/widget_goal_display"
         android:layout_width="wrap_content"
@@ -15,15 +22,5 @@
         android:textSize="16sp"
         android:text="@string/widget_count_display"
         tools:text = "3 / 8" />
-
-    <Button
-        android:id="@+id/widget_add_button"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center|bottom"
-        android:background="@drawable/widget_plus_button"
-        android:textColor="@color/white"
-        android:text="+" />
 
 </FrameLayout>

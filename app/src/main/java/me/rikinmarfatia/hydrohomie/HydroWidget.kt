@@ -12,7 +12,7 @@ import me.rikinmarfatia.hydrohomie.models.WaterKrate
 
 class HydroWidget: AppWidgetProvider() {
 
-    private companion object {
+    companion object {
         const val TAG = "HydroHomieWidget"
         const val ACTION_UPDATE_COUNT = "ACTION_UPDATE_COUNT"
     }
@@ -34,7 +34,6 @@ class HydroWidget: AppWidgetProvider() {
 
         val waterStore = WaterKrate(context)
         if (ACTION_UPDATE_COUNT == intent.action ) {
-            waterStore.count++
 
             val display = String.format(
                 context.resources.getString(R.string.widget_count_display),
@@ -49,6 +48,13 @@ class HydroWidget: AppWidgetProvider() {
                 R.layout.hydro_widget
             ).apply {
                 setTextViewText(R.id.widget_goal_display, display)
+                setImageViewResource(
+                    R.id.widget_water_fill_level,
+                    waterFillDrawable(
+                        waterStore.count,
+                        waterStore.goal
+                    )
+                )
             }
 
             val appWidget = ComponentName(context, HydroWidget::class.java)
@@ -61,11 +67,9 @@ class HydroWidget: AppWidgetProvider() {
         val waterStore = WaterKrate(context)
         Log.d(TAG, "WaterStore Count: ${waterStore.count}")
 
-        val pendingIntent: PendingIntent = Intent(context, HydroWidget::class.java)
-            .let { intent ->
-                intent.action = ACTION_UPDATE_COUNT
-                PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            }
+        val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java).let { intent ->
+            PendingIntent.getActivity(context, 0, intent, 0)
+        }
 
         val display = String.format(
             context.resources.getString(R.string.widget_count_display),
@@ -77,11 +81,41 @@ class HydroWidget: AppWidgetProvider() {
             context.packageName,
             R.layout.hydro_widget
         ).apply {
-            setOnClickPendingIntent(R.id.widget_add_button, pendingIntent)
+            setOnClickPendingIntent(R.id.widget_container, pendingIntent)
             setTextViewText(R.id.widget_goal_display, display)
+            setImageViewResource(
+                R.id.widget_water_fill_level,
+                waterFillDrawable(
+                    waterStore.count,
+                    waterStore.goal
+                )
+            )
         }
 
-        // Tell the AppWidgetManager to perform an update on the current app widget
         appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+
+    private fun waterFillDrawable(
+        count: Int,
+        goal: Int
+    ): Int {
+        val percentCompletion = count.toFloat() / goal
+        return when {
+            percentCompletion == 0F -> {
+                R.drawable.widget_water_fill_none
+            }
+            percentCompletion <= .25 -> {
+                R.drawable.widget_water_fill_some
+            }
+            percentCompletion <= .5 -> {
+                R.drawable.widget_water_fill_half
+            }
+            percentCompletion < 1F -> {
+                R.drawable.widget_water_fill_most
+            }
+            else -> {
+                R.drawable.widget_water_fill_full
+            }
+        }
     }
 }

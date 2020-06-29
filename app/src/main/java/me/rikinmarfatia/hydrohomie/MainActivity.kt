@@ -1,5 +1,7 @@
 package me.rikinmarfatia.hydrohomie
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
@@ -35,7 +37,6 @@ import me.rikinmarfatia.hydrohomie.ui.DailyGoalDisplay
 import me.rikinmarfatia.hydrohomie.ui.ProfilePic
 import me.rikinmarfatia.hydrohomie.ui.WaterGlass
 
-@ExperimentalStdlibApi
 class MainActivity : AppCompatActivity() {
     private lateinit var waterStore: WaterKrate
 
@@ -46,14 +47,14 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             HydroHomieTheme {
-                DailyTrackerContainer(waterStore)
+                DailyTrackerContainer(this, waterStore)
             }
         }
     }
 }
 
 @Composable
-fun DailyTrackerContainer(store: WaterKrate) {
+fun DailyTrackerContainer(context: Context, store: WaterKrate) {
     // State that holds the information needed to render the screen
     var waterState by state {
         WaterState(
@@ -73,11 +74,17 @@ fun DailyTrackerContainer(store: WaterKrate) {
         val transition = WaterTransition(current, next)
         waterState = waterState.copy(count = count, transition = transition)
         store.count = count
+        context.sendBroadcast(Intent(context, HydroWidget::class.java).apply {
+            action = HydroWidget.ACTION_UPDATE_COUNT
+        })
     }
 
     val resetAction: () -> Unit = {
         waterState = WaterState()
         store.count = 0
+        context.sendBroadcast(Intent(context, HydroWidget::class.java).apply {
+            action = HydroWidget.ACTION_UPDATE_COUNT
+        })
     }
 
     // A very basic container, really easy to use to center everything
@@ -125,7 +132,7 @@ fun DailyTrackerContainer(store: WaterKrate) {
 @Composable
 fun LightPreview() {
     HydroHomieTheme(darkTheme = false) {
-        DailyTrackerContainer(WaterKrate(ContextAmbient.current))
+        DailyTrackerContainer(ContextAmbient.current, WaterKrate(ContextAmbient.current))
     }
 }
 
@@ -133,6 +140,6 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     HydroHomieTheme(darkTheme = true) {
-        DailyTrackerContainer(WaterKrate(ContextAmbient.current))
+        DailyTrackerContainer(ContextAmbient.current, WaterKrate(ContextAmbient.current))
     }
 }
