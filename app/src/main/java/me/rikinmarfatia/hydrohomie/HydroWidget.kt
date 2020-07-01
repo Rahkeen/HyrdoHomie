@@ -10,7 +10,7 @@ import android.util.Log
 import android.widget.RemoteViews
 import me.rikinmarfatia.hydrohomie.models.WaterKrate
 
-class HydroWidget: AppWidgetProvider() {
+class HydroWidget : AppWidgetProvider() {
 
     companion object {
         const val TAG = "HydroHomieWidget"
@@ -33,7 +33,7 @@ class HydroWidget: AppWidgetProvider() {
         super.onReceive(context, intent)
         Log.d(TAG, "Received: ${intent.action}")
 
-        if (ACTION_UPDATE_COUNT == intent.action ) {
+        if (ACTION_UPDATE_COUNT == intent.action) {
 
             val views: RemoteViews = renderWidgetViews(context)
 
@@ -79,31 +79,27 @@ class HydroWidget: AppWidgetProvider() {
     }
 
     private fun waterDisplay(count: Int, goal: Int, context: Context): String {
-       return String.format(
-           context.resources.getString(R.string.widget_count_display),
-           count,
-           goal
-       )
+        return when (count) {
+            0 -> context.resources.getString(R.string.widget_count_empty)
+            goal -> context.resources.getString(R.string.widget_count_full)
+            else -> {
+                String.format(
+                    context.resources.getString(R.string.widget_count_display),
+                    count,
+                    goal
+                )
+            }
+        }
     }
 
     private fun waterFillDrawable(count: Int, goal: Int): Int {
         val percentCompletion = count.toFloat() / goal
         return when {
-            percentCompletion == 0F -> {
-                R.drawable.widget_water_fill_none
-            }
-            percentCompletion <= .25 -> {
-                R.drawable.widget_water_fill_some
-            }
-            percentCompletion <= .5 -> {
-                R.drawable.widget_water_fill_half
-            }
-            percentCompletion < 1F -> {
-                R.drawable.widget_water_fill_most
-            }
-            else -> {
-                R.drawable.widget_water_fill_full
-            }
+            percentCompletion == 0F -> R.drawable.widget_water_fill_none
+            percentCompletion <= .25 -> R.drawable.widget_water_fill_some
+            percentCompletion <= .5 -> R.drawable.widget_water_fill_half
+            percentCompletion < 1F -> R.drawable.widget_water_fill_most
+            else -> R.drawable.widget_water_fill_full
         }
     }
 }
