@@ -3,8 +3,6 @@
     android:initialLayout="@layout/hydro_widget"
     android:minWidth="@dimen/widget_cell_2"
     android:minHeight="@dimen/widget_cell_1"
-    android:minResizeWidth="@dimen/widget_cell_2"
-    android:minResizeHeight="@dimen/widget_cell_1"
     android:resizeMode="none"
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="0"

@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_container"
-    android:layout_width="110dp"
-    android:layout_height="110dp"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/widget_container_size"
     android:background="@drawable/widget_background">
 
     <ImageView
