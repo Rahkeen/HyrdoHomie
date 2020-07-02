@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.HyrdroHomie" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.HydroHomie" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -14,16 +14,16 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.HyrdroHomie.NoActionBar">
+    <style name="Theme.HydroHomie.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.HyrdroHomie.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.HydroHomie.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.HyrdroHomie.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.HydroHomie.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ThemeOverlay.HyrdroHomie.AppWidgetContainer" parent="">
+    <style name="ThemeOverlay.HydroHomie.AppWidgetContainer" parent="">
         <item name="appWidgetBackgroundColor">@color/light_blue_600</item>
         <item name="appWidgetTextColor">@color/light_blue_50</item>
     </style>
