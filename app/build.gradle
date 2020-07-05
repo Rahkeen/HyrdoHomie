@@ -51,6 +51,7 @@ dependencies {
     implementation "androidx.ui:ui-tooling:$compose_version"
 
     implementation "dev.chrisbanes.accompanist:accompanist-coil:0.1.6"
+    implementation 'com.github.zsoltk:compose-router:0.14.0'
 
     implementation 'hu.autsoft:krate:0.4.0'
 

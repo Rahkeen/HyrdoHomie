@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.getValue
 import androidx.compose.setValue
 import androidx.compose.state
@@ -28,17 +29,24 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
+import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.router.Router
 import me.rikinmarfatia.hydrohomie.models.WaterKrate
 import me.rikinmarfatia.hydrohomie.models.WaterState
 import me.rikinmarfatia.hydrohomie.models.WaterTransition
 import me.rikinmarfatia.hydrohomie.theme.HydroHomieTheme
 import me.rikinmarfatia.hydrohomie.theme.hydroBlue
 import me.rikinmarfatia.hydrohomie.ui.DailyGoalDisplay
+import me.rikinmarfatia.hydrohomie.ui.HistoryContainer
+import me.rikinmarfatia.hydrohomie.ui.HistoryState
 import me.rikinmarfatia.hydrohomie.ui.ProfilePic
+import me.rikinmarfatia.hydrohomie.ui.Routing
 import me.rikinmarfatia.hydrohomie.ui.WaterGlass
 
 class MainActivity : AppCompatActivity() {
     private lateinit var waterStore: WaterKrate
+    private val backPressHandler = BackPressHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,14 +55,36 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             HydroHomieTheme {
-                DailyTrackerContainer(this, waterStore)
+                Providers(
+                    AmbientBackPressHandler provides backPressHandler
+                ) {
+                    Router<Routing>("MainActivity", defaultRouting = Routing.Daily) { backStack ->
+                        when (backStack.last()) {
+                            is Routing.Daily -> DailyTrackerContainer(context = this, store = waterStore) {
+                                backStack.push(Routing.History)
+                            }
+                            is Routing.History -> HistoryContainer(state = HistoryState(days = listOf(waterStore.toWaterState())))
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!backPressHandler.handle()) {
+            super.onBackPressed()
         }
     }
 }
 
+
 @Composable
-fun DailyTrackerContainer(context: Context, store: WaterKrate) {
+fun DailyTrackerContainer(
+    context: Context,
+    store: WaterKrate,
+    onProfileClicked: () -> Unit = {}
+) {
     // State that holds the information needed to render the screen
     var waterState by state {
         WaterState(
@@ -98,7 +128,7 @@ fun DailyTrackerContainer(context: Context, store: WaterKrate) {
             modifier = Modifier.fillMaxWidth(),
             horizontalGravity = Alignment.CenterHorizontally
         ) {
-            ProfilePic()
+            ProfilePic(onProfileClicked)
             Spacer(modifier = Modifier.height(16.dp))
             WaterGlass(waterState)
             // Container that lays out children horizontally
