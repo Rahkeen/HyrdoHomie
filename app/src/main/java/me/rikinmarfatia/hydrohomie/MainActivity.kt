@@ -64,7 +64,10 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun LightPreview() {
     HydroHomieTheme(darkTheme = false) {
-        DailyIntakeContainer(ContextAmbient.current, WaterKrate(ContextAmbient.current))
+        DailyIntakeContainer(
+            context = ContextAmbient.current,
+            store = WaterKrate(ContextAmbient.current)
+        )
     }
 }
 
@@ -72,6 +75,9 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     HydroHomieTheme(darkTheme = true) {
-        DailyIntakeContainer(ContextAmbient.current, WaterKrate(ContextAmbient.current))
+        DailyIntakeContainer(
+            context = ContextAmbient.current,
+            store = WaterKrate(ContextAmbient.current)
+        )
     }
 }

@@ -20,6 +20,7 @@ import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import me.rikinmarfatia.hydrohomie.R
 import me.rikinmarfatia.hydrohomie.models.WaterState
+import me.rikinmarfatia.hydrohomie.theme.HydroHomieTheme
 import me.rikinmarfatia.hydrohomie.theme.hydroBlue
 
 data class HistoryState(
@@ -28,11 +29,14 @@ data class HistoryState(
 
 @Composable
 fun HistoryContainer(state: HistoryState) {
-    LazyColumnItems(items = state.days,
-        itemContent = {
-            Spacer(modifier = Modifier.height(8.dp))
-            HistoryRow(state = it)
-        })
+    HydroHomieTheme {
+        LazyColumnItems(items = state.days,
+            itemContent = {
+                Spacer(modifier = Modifier.height(8.dp))
+                HistoryRow(state = it)
+            }
+        )
+    }
 }
 
 @ExperimentalStdlibApi
