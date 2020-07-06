@@ -1,4 +1,4 @@
-package me.rikinmarfatia.hydrohomie.models
+package me.rikinmarfatia.hydrohomie.domain
 
 import android.content.Context
 import hu.autsoft.krate.SimpleKrate
@@ -11,7 +11,10 @@ class WaterKrate(context: Context, name: String = "WaterPrefs") : SimpleKrate(co
     fun toWaterState(): WaterState {
         return WaterState(
             count = count,
-            goal = goal
+            goal = goal,
+            transition = WaterTransition(
+                current = count.toFloat() / goal
+            )
         )
     }
 }

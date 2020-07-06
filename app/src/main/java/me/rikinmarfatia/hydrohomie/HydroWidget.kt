@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
-import me.rikinmarfatia.hydrohomie.models.WaterKrate
+import me.rikinmarfatia.hydrohomie.domain.WaterKrate
 
 class HydroWidget : AppWidgetProvider() {
 

@@ -19,7 +19,7 @@ import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import me.rikinmarfatia.hydrohomie.R
-import me.rikinmarfatia.hydrohomie.models.WaterState
+import me.rikinmarfatia.hydrohomie.domain.WaterState
 import me.rikinmarfatia.hydrohomie.theme.HydroHomieTheme
 import me.rikinmarfatia.hydrohomie.theme.hydroBlue
 
