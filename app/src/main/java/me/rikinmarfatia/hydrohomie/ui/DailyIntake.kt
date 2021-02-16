@@ -1,6 +1,8 @@
 package me.rikinmarfatia.hydrohomie.ui
 
 
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,9 @@ import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,6 +94,11 @@ private fun ActionButtons(actions: (WaterAction) -> Unit) {
 @Composable
 fun WaterGlass(state: WaterState) {
 
+    val transition = updateTransition(targetState = state)
+    val percentage: Float by transition.animateFloat {
+        it.percentCompletion
+    }
+
     fun waterShape(state: WaterState): Shape {
         val cupsLeft = state.goal - state.count
         return when {
@@ -105,7 +115,7 @@ fun WaterGlass(state: WaterState) {
             modifier = Modifier
                 .clip(waterShape(state))
                 .fillMaxWidth()
-                .fillMaxHeight(fraction = state.percentCompletion)
+                .fillMaxHeight(fraction = percentage)
                 .background(color = hydroBlue),
         )
     }

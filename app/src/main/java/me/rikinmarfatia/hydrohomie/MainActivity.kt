@@ -43,10 +43,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }
 
 @Preview(showBackground = true)
