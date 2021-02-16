@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -24,7 +25,7 @@ fun ProfilePic(onClick: () -> Unit = {}) {
     val imageModifier = Modifier
         .size(60.dp)
         .clip(CircleShape)
-        .border(width = 2.dp, color = MaterialTheme.colors.onSurface, shape = CircleShape)
+        .border(width = 4.dp, color = MaterialTheme.colors.onSurface, shape = CircleShape)
         .clickable(onClick = onClick)
 
     Row(
@@ -35,6 +36,7 @@ fun ProfilePic(onClick: () -> Unit = {}) {
             data = "https://i.pinimg.com/originals/13/8c/8d/138c8d92efa0228c42c5e43517d99479.jpg",
             contentDescription = null,
             modifier = imageModifier,
+            contentScale = ContentScale.Crop
         )
     }
 }
