@@ -1,23 +1,28 @@
 package me.rikinmarfatia.hydrohomie.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.lazy.LazyColumnItems
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.ConstraintLayout
-import androidx.ui.layout.Dimension
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.height
-import androidx.ui.layout.padding
-import androidx.ui.material.Card
-import androidx.ui.material.MaterialTheme
-import androidx.ui.res.vectorResource
-import androidx.ui.tooling.preview.Preview
-import androidx.ui.unit.dp
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import me.rikinmarfatia.hydrohomie.R
 import me.rikinmarfatia.hydrohomie.domain.WaterState
 import me.rikinmarfatia.hydrohomie.theme.HydroHomieTheme
@@ -30,10 +35,12 @@ data class HistoryState(
 @Composable
 fun HistoryContainer(state: HistoryState) {
     HydroHomieTheme {
-        LazyColumnItems(items = state.days,
-            itemContent = {
-                Spacer(modifier = Modifier.height(8.dp))
-                HistoryRow(state = it)
+        LazyColumn(
+            content = {
+                items(items = state.days) { item ->
+                    Spacer(modifier = Modifier.height(8.dp))
+                    HistoryRow(state = item)
+                }
             }
         )
     }
@@ -58,19 +65,22 @@ fun HistoryRow(state: WaterState) {
         .padding(horizontal = 8.dp)
         .height(60.dp)
 
-    val waterIcon = vectorResource(id = R.drawable.ic_favorite)
+    val waterIcon = painterResource(id = R.drawable.ic_favorite)
 
     Card(
         modifier = cardModifier,
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
     ) {
-        ConstraintLayout {
-            val (date, progress, icon, fill) = createRefs()
-            val guideline = createGuidelineFromStart(state.percentCompletion)
-            Box(
-                backgroundColor = hydroBlue,
-                modifier = Modifier.constrainAs(fill) {
+        ConstraintLayout(
+            ConstraintSet {
+                val date = createRefFor("date")
+                val progress = createRefFor("progress")
+                val icon = createRefFor("icon")
+                val fill = createRefFor("fill")
+                val guideline = createGuidelineFromStart(state.percentCompletion)
+
+                constrain(fill) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
@@ -78,29 +88,41 @@ fun HistoryRow(state: WaterState) {
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
                 }
-            )
-            Icon(
-                asset = waterIcon,
-                tint = MaterialTheme.colors.onSurface,
-                modifier = Modifier.constrainAs(icon) {
+
+                constrain(icon) {
                     centerVerticallyTo(parent)
                     start.linkTo(parent.start, 16.dp)
-
                 }
-            )
-            Text(
-                text = "Saturday, January 8th, 2020",
-                modifier = Modifier.constrainAs(date) {
+
+                constrain(date) {
                     centerVerticallyTo(parent)
                     start.linkTo(icon.end, 16.dp)
                 }
-            )
-            Text(
-                text = "${state.count} / ${state.goal}",
-                modifier = Modifier.constrainAs(progress) {
+
+                constrain(progress) {
                     centerVerticallyTo(parent)
                     end.linkTo(parent.end, 16.dp)
                 }
+
+            }
+        ) {
+
+            Box(
+                modifier = Modifier.background(color = hydroBlue).layoutId("fill")
+            )
+            Icon(
+                painter = waterIcon,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSurface,
+                modifier = Modifier.layoutId("icon")
+            )
+            Text(
+                text = "Saturday, January 8th, 2020",
+                modifier = Modifier.layoutId("date")
+            )
+            Text(
+                text = "${state.count} / ${state.goal}",
+                modifier = Modifier.layoutId("progress")
             )
         }
     }

@@ -2,27 +2,20 @@ package me.rikinmarfatia.hydrohomie
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.getValue
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.ui.core.setContent
-import androidx.ui.tooling.preview.Preview
-import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
-import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.router.Router
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import me.rikinmarfatia.hydrohomie.domain.WaterState
 import me.rikinmarfatia.hydrohomie.domain.WaterViewModel
 import me.rikinmarfatia.hydrohomie.theme.HydroHomieTheme
 import me.rikinmarfatia.hydrohomie.ui.DailyIntakeContainer
-import me.rikinmarfatia.hydrohomie.ui.HistoryContainer
-import me.rikinmarfatia.hydrohomie.ui.HistoryState
-import me.rikinmarfatia.hydrohomie.ui.Routing
 
 class MainActivity : AppCompatActivity() {
-    private val backPressHandler = BackPressHandler()
 
     private lateinit var waterViewModel: WaterViewModel
 
@@ -36,41 +29,23 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             HydroHomieTheme {
-                Providers(
-                    AmbientBackPressHandler provides backPressHandler
-                ) {
-                    var waterState by state { waterViewModel.state }
-                    waterViewModel.states().subscribe {
-                        Log.d("HydroHomie", it.toString())
-                        waterState = it
-                    }
-
-                    Router<Routing>("MainActivity", defaultRouting = Routing.Daily) { backStack ->
-                        when (backStack.last()) {
-                            is Routing.Daily -> {
-                                DailyIntakeContainer(
-                                    state = waterState,
-                                    actions = waterViewModel::actions
-                                )
-                            }
-                            is Routing.History -> HistoryContainer(
-                                state = HistoryState(
-                                    days = listOf(
-                                        waterState
-                                    )
-                                )
-                            )
-                        }
-                    }
+                var waterState by remember { mutableStateOf(waterViewModel.state) }
+                waterViewModel.states().subscribe {
+                    Log.d("HydroHomie", it.toString())
+                    waterState = it
                 }
+
+                DailyIntakeContainer(
+                    state = waterState,
+                    actions = waterViewModel::actions
+                )
+
             }
         }
     }
 
     override fun onBackPressed() {
-        if (!backPressHandler.handle()) {
-            super.onBackPressed()
-        }
+        super.onBackPressed()
     }
 }
 

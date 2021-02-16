@@ -1,80 +1,77 @@
 package me.rikinmarfatia.hydrohomie.ui
 
-import androidx.animation.FastOutSlowInEasing
-import androidx.animation.FloatPropKey
-import androidx.animation.transitionDefinition
-import androidx.compose.Composable
-import androidx.ui.animation.Transition
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.core.clip
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.Stack
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.height
-import androidx.ui.layout.padding
-import androidx.ui.layout.width
-import androidx.ui.material.Button
-import androidx.ui.material.MaterialTheme
-import androidx.ui.text.style.TextAlign
-import androidx.ui.tooling.preview.Preview
-import androidx.ui.unit.Dp
-import androidx.ui.unit.dp
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import me.rikinmarfatia.hydrohomie.domain.WaterAction
 import me.rikinmarfatia.hydrohomie.domain.WaterState
 import me.rikinmarfatia.hydrohomie.domain.WaterTransition
 import me.rikinmarfatia.hydrohomie.theme.hydroBlue
 
-private val waterHeightPercent = FloatPropKey()
 
-fun waterTransitionDefinition(waterState: WaterState) = transitionDefinition {
-    state("start") { this[waterHeightPercent] = waterState.transition.previous }
-    state("end") { this[waterHeightPercent] = waterState.transition.current }
-
-    transition(fromState = "start", toState = "end") {
-        waterHeightPercent using tween<Float> {
-            duration = 300
-            easing = FastOutSlowInEasing
-        }
-    }
-}
+//fun waterTransition(waterState: WaterState) = updateTransition(targetState = "end") {
+//    state("start") { this[waterHeightPercent] = waterState.transition.previous }
+//    state("end") { this[waterHeightPercent] = waterState.transition.current }
+//
+//    transition(fromState = "start", toState = "end") {
+//        waterHeightPercent using tween<Float> {
+//            duration = 300
+//            easing = FastOutSlowInEasing
+//        }
+//    }
+//}
 
 @Composable
 fun DailyIntakeContainer(
     state: WaterState,
     actions: (WaterAction) -> Unit
 ) {
-
     // A very basic container, really easy to use to center everything
     Box(
-        modifier = Modifier.fillMaxSize(),
-        gravity = ContentGravity.Center,
-        backgroundColor = MaterialTheme.colors.background
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colors.background),
+        contentAlignment = Alignment.Center,
     ) {
         // Container that layouts children vertically
         Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalGravity = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ProfilePic()
             Spacer(modifier = Modifier.height(16.dp))
             WaterGlass(state)
-            // Container that lays out children horizontally
             Row {
                 Button(
                     onClick = { actions(WaterAction.Add(1)) },
                     modifier = Modifier
                         .padding(vertical = 16.dp, horizontal = 8.dp)
-                        .clip(MaterialTheme.shapes.large),
-                    backgroundColor = hydroBlue
+                        .clip(CircleShape),
+                    colors = buttonColors(backgroundColor = hydroBlue)
                 ) {
                     Text(text = "Add", color = MaterialTheme.colors.onSurface)
                 }
@@ -82,8 +79,8 @@ fun DailyIntakeContainer(
                     onClick = { actions(WaterAction.Reset) },
                     modifier = Modifier
                         .padding(vertical = 16.dp, horizontal = 8.dp)
-                        .clip(MaterialTheme.shapes.large),
-                    backgroundColor = Color.Red
+                        .clip(CircleShape),
+                    colors = buttonColors(backgroundColor = Color.Red)
                 ) {
                     Text(text = "Reset", color = MaterialTheme.colors.onSurface)
                 }
@@ -101,31 +98,29 @@ fun DailyIntakeContainer(
 fun WaterGlass(state: WaterState) {
     val width = 300.dp
     val height = 400.dp
-    val transitionDef = waterTransitionDefinition(state)
     val shapeModifier = Modifier.clip(RoundedCornerShape(16.dp))
 
     fun waterHeight(completion: Float): Dp {
         return height * completion
     }
 
-    Stack(
+    Box(
         modifier = Modifier
             .width(width)
-            .height(height)
+            .height(height),
+        contentAlignment = Alignment.BottomCenter
     ) {
         Box(
-            modifier = shapeModifier.fillMaxSize(),
-            backgroundColor = Color.LightGray
+            modifier = shapeModifier
+                .fillMaxSize()
+                .background(color = Color.LightGray),
         )
-        Transition(definition = transitionDef, initState = "start", toState = "end") { state ->
-            Box(
-                modifier = shapeModifier
-                    .fillMaxWidth()
-                    .height(waterHeight(state[waterHeightPercent]))
-                    .gravity(Alignment.BottomCenter),
-                backgroundColor = hydroBlue
-            )
-        }
+        Box(
+            modifier = shapeModifier
+                .fillMaxWidth()
+                .height(waterHeight(state.percentCompletion))
+                .background(color = hydroBlue),
+        )
     }
 }
 

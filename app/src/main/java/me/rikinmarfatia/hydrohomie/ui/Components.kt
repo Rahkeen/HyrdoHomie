@@ -1,22 +1,19 @@
 package me.rikinmarfatia.hydrohomie.ui
 
-import androidx.compose.Composable
-import androidx.compose.emptyContent
-import androidx.ui.core.Modifier
-import androidx.ui.core.clip
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.drawBorder
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Row
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.size
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Surface
-import androidx.ui.tooling.preview.Preview
-import androidx.ui.unit.dp
+
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 /**
@@ -27,7 +24,7 @@ fun ProfilePic(onClick: () -> Unit = {}) {
     val imageModifier = Modifier
         .size(60.dp)
         .clip(CircleShape)
-        .drawBorder(size = 2.dp, color = MaterialTheme.colors.onSurface, shape = CircleShape)
+        .border(width = 2.dp, color = MaterialTheme.colors.onSurface, shape = CircleShape)
         .clickable(onClick = onClick)
 
     Row(
@@ -36,14 +33,8 @@ fun ProfilePic(onClick: () -> Unit = {}) {
     ) {
         CoilImage(
             data = "https://i.pinimg.com/originals/13/8c/8d/138c8d92efa0228c42c5e43517d99479.jpg",
+            contentDescription = null,
             modifier = imageModifier,
-            loading = {
-                Surface(
-                    color = Color.LightGray,
-                    content = emptyContent(),
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
         )
     }
 }
