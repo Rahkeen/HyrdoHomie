@@ -1,7 +1,9 @@
 package me.rikinmarfatia.hydrohomie.ui
 
 
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -95,7 +97,9 @@ private fun ActionButtons(actions: (WaterAction) -> Unit) {
 fun WaterGlass(state: WaterState) {
 
     val transition = updateTransition(targetState = state)
-    val percentage: Float by transition.animateFloat {
+    val percentage: Float by transition.animateFloat(transitionSpec = {
+        spring(stiffness = Spring.StiffnessLow, dampingRatio = Spring.DampingRatioLowBouncy)
+    }) {
         it.percentCompletion
     }
 
